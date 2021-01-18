@@ -1,0 +1,122 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+
+{% block metadescription %}soupla-design.gr - Επιβεβαιώστε τα είδη, την τιμή και προχωρήστε στην ολοκλήρωση της
+παραγγελίας{% endblock metadescription %}
+
+{% block title %}soupla-design.gr | Δείτε το καλάθι αγορών σας{% endblock title %}
+
+{% block content %}
+
+{% include 'shop/menu.html' %}
+
+<section class="cart-container">
+  <div class="container">
+    {% if items %}
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="cart-element">
+          <a data-toggle="tooltip" data-placement="top" title="Αρχική σελίδα" href="{% url 'shop' %}"
+             class="btn my-btn home">&#x2190; Αρχική</a>
+          <br>
+          <hr>
+          <div class="cart-summary">
+            <h5>Είδη: <strong class="cart-quantity">{{order.get_cart_items}}</strong></h5>
+            <h5>Τιμή: <strong class="cart-total">{{order.get_cart_total|floatformat:0}}</strong>€</h5>
+            <a data-toggle="tooltip" data-placement="top" title="Συμπλήρωση στοιχείων" class="btn my-btn"
+               href="{% url 'order_info' %}">Επόμενο &#8594; Συμπλήρωση στοιχείων</a>
+          </div>
+        </div>
+        <div class="cart-element mt-5 px-4">
+          <div class="cart-row">
+            <div class="d-none d-lg-block" style="flex:2"></div>
+            <div style="flex:2"><strong>Είδος χαρτιού</strong></div>
+            <div style="flex:1"><strong>Πακέτο</strong></div>
+            <div class="d-none d-md-block" style="flex:1"><strong>Τιμή</strong></div>
+            <div style="flex:1"><strong>Ποσότητα</strong></div>
+            <div class="d-none d-sm-block" style="flex:1; display: flex; justify-content: flex-end;">
+              <strong>Σύνολο</strong>
+            </div>
+          </div>
+
+          <hr>
+
+          {% for item in items %}
+          <div class="cart-row">
+            <div class="d-none d-lg-block" style="flex:2">
+              <img class="row-image" src="{{item.product.thumbnail.url}}" alt="product image">
+            </div>
+            <div style="flex:2">
+              <p>{{item.product.name}}</p>
+            </div>
+            <div style="flex:1">
+              <p>{{item.packet}}</p>
+            </div>
+            <div class="d-none d-md-block" style="flex:1">
+              <p class="product-price">{{item.price|floatformat:2}}</p>
+            </div>
+            <div style="flex:1; display: flex; gap: 10px;">
+              <p><strong id="{{item.product.id}}{{item.packet}}{{item.price|floatformat:0}}">{{item.quantity}}</strong>
+              </p>
+              <div class="icons">
+                <p style="display: inline; cursor: pointer;" data-product='{{item.product.id}}' data-action='add'
+                   data-packet='{{item.packet}}' data-price='{{item.price}}' class="update-item">
+                  <i style="color:green" class="fas fa-plus-circle update-icon"></i>
+                </p>
+                <p style="display: inline; cursor: pointer;" data-product='{{item.product.id}}' data-action='remove'
+                   data-packet='{{item.packet}}' data-price='{{item.price}}' class="update-item ml-2">
+                  <i style="color:red" class="fas fa-minus-circle update-icon"></i>
+                </p>
+                <p style="display: inline; cursor: pointer;" data-product='{{item.product.id}}' data-action='delete'
+                   data-packet='{{item.packet}}' data-price='{{item.price}}' class="update-item ml-2">
+                  <i class="fas fa-trash-alt update-icon"></i>
+                </p>
+              </div>
+            </div>
+            <div style="flex:1; display: flex; justify-content: flex-end;" class="d-none d-sm-block">
+              <p>
+                <strong
+                        id="{{item.price|floatformat:0}}{{item.packet}}{{item.product.id}}">{{item.get_total|floatformat:2}}</strong>
+                €
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="cart-element info mt-5">
+          <p>Πατώντας <i style="font-weight: 700; margin-right: 5px;">"Επόμενο &#8594; Συμπλήρωση στοιχείων"</i> θα
+            μεταφερθείτε στη σελίδα
+            συμπλήρωσης των παρακάτω
+            στοιχείων:</p>
+          <ul>
+            <li>Στοιχεία Επικοινωνίας</li>
+            <li>Στοιχεία Τιμολόγησης</li>
+            <li>Στοιχεία Αποστολής</li>
+            <li>Κωδικός Τραπεζικής Πληρωμής
+              <ul class="pl-5">
+                <li>Η πληρωμή της παραγγελίας γίνεται μόνο τραπεζικά στον παρακάτω λογαριασμό:</li>
+                <li>IBAN: GRXX XXXX XXXX XXXX XXXX XXX</li>
+                <li>Δικαιούχος: XXXXXXXXX XXXXXXXXXXXX</li>
+                <li>BIC CODE: XXXX XXXXX XXXX XXXX XXXX</li>
+                <li>Τράπεζα: XXXXXXXXX</li>
+              </ul>
+            </li>
+            <li>Αρχεία (.pdf, .tiff, .jpg, .jpeg, .zip, .rar) με τα σχέδια που επιθυμείτε.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% else %}
+<div class="empty-cart">
+  <img src="{% static 'images/empty_cart.svg' %}" alt="empty cart">
+  <h3>Το καλάθι σας είναι άδειο.</h3>
+  <a data-toggle="tooltip" data-placement="bottom" title="Αρχική σελίδα" href="{% url 'shop' %}"
+     class="btn my-btn mt-3">&#x2190; Αρχική</a>
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,98 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+{% block metadescription %}soupla-design.gr - Τα καλύτερα και φθηνότερα σουπλά της αγοράς. Στείλτε μας το σχέδιο σας ή
+επιλέξτε να δημιουργήσουμε εμείς ένα καταπληκτικό σχέδιο για εσάς.{% endblock metadescription %}
+{% block title %}soupla-design.gr | Εκτυπώστε μοναδικά σουπλά{% endblock title %}
+
+{% block content %}
+
+<section class="showcase">
+
+  {% include 'shop/navbar.html' %}
+
+  <video src="{% static 'images/pexels2.mp4' %}" muted loop autoplay></video>
+  <div class="overlay"></div>
+  <div class="text">
+    <h2>ΕΚΤΥΠΩΣΤΕ</h2>
+    <h3>ΜΟΝΑΔΙΚΑ ΣΟΥΠΛΑ</h3>
+    <p>Καλώς ήρθατε στο www.soupla-design.gr, το ηλεκτρονικό κατάστημα της εταιρίας
+      "Ιδεότυπον".<br>Στο κατάστημά μας έχετε τη δυνατότητα να πραγματοποιήσετε την ηλεκτρονική σας παραγγελία για τα
+      σουπλά που επιθυμείτε να παραλάβετε.<br>Σας ευχαριστούμε που επιλέξατε το κατάστημά μας για τις παραγγελίες σας!!
+    </p>
+    <a href="#shop-container" data-toggle="tooltip" data-placement="bottom" title="Δείτε τα χαρτιά μας">ΧΑΡΤΙΑ
+      ΕΚΤΥΠΩΣΗΣ</a>
+  </div>
+  <ul class="contact">
+    <li><i class="fas fa-at"></i>info@soupla-design.gr</li>
+    <li><i class="fas fa-phone-alt"></i>28430 22207</li>
+  </ul>
+</section>
+
+<main>
+
+  <section class="info-cards">
+    <div class="info-card">
+      <img src="{% static 'images/download.svg' %}" alt="download instructions">
+      <p>Κατεβάστε και διαβάστε τις τεχνικές προδιαγραφές σε <a data-toggle="tooltip" data-placement="top"
+           title="Τεχνικές προδιαγραφές" href="{% static 'pdf/Texnikes_prodiagrafes_ektypwsews.pdf' %}"
+           target="_blank">.pdf</a> ή <a data-toggle="tooltip" data-placement="top" title="Τεχνικές προδιαγραφές"
+           href="{% static 'images/Texnikes_prodiagrafes_ektypwsews.jpg' %}" target="_blank">.jpg</a>
+        μορφή.<br><br>Επίσης
+        κατεβάστε και τις αναλυτικές
+        οδηγίες/προδιαγραφές με τις τεχνικές λεπτομέρειες για τη δημιουργία των αρχείων που θα μας
+        αποστείλετε.<br><br><a data-toggle="tooltip" data-placement="bottom" title="Αναλυτικές οδηγίες"
+           href="{% static 'pdf/prodiagrafes.pdf' %}" target="_blank">Αναλυτικές οδηγίες</a></p>
+    </div>
+    <div class="info-card">
+      <p>Σε περίπτωση που δεν επιθυμείτε να χρησιμοποιήσετε την online φόρμα παραγγελιών τότε μπορείτε να μας στείλετε
+        τα αρχεία με email ή (αν είναι πολύ μεγάλα) χρησιμοποιώντας την υπηρεσία wetranfer.com.<br><br>Μη ξεχνάτε να
+        αναφέρετε το ΑΦΜ σας (για να σας βρούμε εύκολα), το είδος της εργασίας, την καθαρή διάσταση της παραγγελίας σας,
+        την ποσότητα και τέλος ένα τηλέφωνο και ένα όνομα για να γνωρίζουμε με ποιον πρέπει να επικοινωνήσουμε για
+        οποιαδήποτε διευκρίνιση.
+      </p>
+      <img src="{% static 'images/email.svg' %}" alt="email instructions">
+    </div>
+  </section>
+
+  <section class="shop-container" id="shop-container">
+    <div class="container text-center">
+      <h2 class="shop-title">ΧΑΡΤΙΑ ΕΚΤΥΠΩΣΗΣ</h2>
+      <hr class="mb-3">
+      <h6 class="shop-subtitle">Χρησιμοποιούμε χαρτιά και μελάνια πιστοποιημένα για επαφή με τρόφιμα</h6>
+      <div class="my-grid">
+        {% for product in products %}
+        <article class="box-element">
+          <img src="{{ product.thumbnail.url }}" class="box-element-image" alt="{{ product.name }}">
+          <h6><strong>{{ product.name }}</strong></h6>
+          <!-- <h6 class="mt-3">{{ product.description|truncatechars:150 }}</h6> -->
+          <!-- <hr> -->
+
+          <div class="form-group">
+            <label for="packet-select">Επιλέξτε πακέτο</label>
+            <select name="quantity" class="form-control packet-choice" id="packet-select">
+              {% for q in product.packets.all %}
+              <option value="{{q.packet_number}} {{q.price|floatformat:2}}" class="packet-option">Ποσότητα:
+                {{q.packet_number}} ---- Τιμή: {{q.price|floatformat:2}}€</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% if user.is_authenticated %}
+          <button data-product='{{product.id}}' data-action='add' class=" btn my-btn btn-block update-cart">Προσθήκη
+            στο καλάθι</button>
+          {% else %}
+          <a data-toggle="tooltip" data-placement="bottom" title="Σύνδεση/Εγγραφή" class="btn btn-warning btn-block"
+             href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Σύνδεση</a>
+          {% endif %}
+        </article>
+        {% empty %}
+        <h4 style="color:white;">ΔΕΝ ΥΠΑΡΧΟΥΝ ΠΡΟΙΟΝΤΑ</h4>
+        {% endfor %}
+      </div>
+
+      {% include 'shop/pagination.html' %}
+
+    </div>
+  </section>
+</main>
+
+{% endblock content %}

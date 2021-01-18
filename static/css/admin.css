@@ -1,0 +1,14 @@
+#header {
+  height: 60px;
+  background-color: rgba(22, 71, 87, 0.89);
+  color: white;
+}
+
+#branding h1 {
+  color: white;
+}
+
+div.breadcrumbs,
+.module caption {
+  background-color:  rgba(36, 119, 146, 0.89);
+}

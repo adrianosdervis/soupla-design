@@ -1,0 +1,40 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+{% block metadescription %}soupla-design.gr - Login to your account.{% endblock metadescription %}
+{% block title %}soupla-design.gr | Συνδεθείτε{% endblock title %}
+
+{% block content %}
+
+{% include 'shop/menu.html' %}
+
+<div class="log-container">
+  <div id="login-form">
+    <form action="{% url 'login' %}" method="POST">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4 py-2 px-3">
+          <i class="fas fa-sign-in-alt mr-4"></i>Login
+        </legend>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="password2">Password</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <button type="submit" class="btn my-btn btn-block">Login</button>
+      </div>
+    </form>
+    <div class="border-top pt-3">
+      <small class="test-muted d-block">New User; <a data-toggle="tooltip" data-placement="bottom" title="Εγγραφή"
+           class="ml-1" href="{% url 'register' %}">Register.</a></small>
+      <small class="test-muted">Forgot your password; <a data-toggle="tooltip" data-placement="bottom"
+           title="Reset password" class="ml-1" href="{% url 'password_reset' %}">Reset your
+          password.</a></small>
+    </div>
+  </div>
+</div>
+{% endblock content %}

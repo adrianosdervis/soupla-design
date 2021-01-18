@@ -1,0 +1,40 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+
+{% block metadescription %}soupla-design.gr - {{ product.description|truncatewords:100 }}{% endblock metadescription %}
+
+{% block title %}soupla-design.gr | {{product.name}}{% endblock title %}
+
+{% block content %}
+<section class="product-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <img src="{{ product.thumbnail.url }}" class="img-fluid" alt="{{ product.name }}">
+      </div>
+      <div class="col-lg-6">
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+
+
+        <div class="form-group">
+          <label for="packet-select">Επιλέξτε πακέτο</label>
+          <select name="quantity" class="form-control packet-choice" id="packet-select">
+            {% for q in product.packets.all %}
+            <option value="{{q.packet_number}} {{q.price|floatformat:2}}" class="packet-option">Ποσότητα:
+              {{q.packet_number}} ---- Τιμή: {{q.price|floatformat:2}}€</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% if user.is_authenticated %}
+        <button data-product='{{product.id}}' data-action='add' class=" btn my-btn btn-block update-cart">Προσθήκη
+          στο καλάθι</button>
+        {% else %}
+        <button class="btn btn-warning btn-block" disabled>Συνδεθείτε για προσθήκη</button>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

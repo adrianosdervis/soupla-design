@@ -1,0 +1,123 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block metadescription %}soupla-design.gr - Δείτε το προφίλ σας{% endblock metadescription %}
+{% block title %}soupla-design.gr | Δείτε το προφίλ σας{% endblock title %}
+
+{% block content %}
+
+{% include 'shop/menu.html' %}
+
+<section class="profile-container">
+  <div class="profile">
+    <h6>ΟΝΟΜΑΤΕΠΩΝΥΜΟ: <span class="font-weight-bold">{{ customer.name }}</span></h6>
+    <h6>Email: <span class="font-weight-bold">{{ customer.email }}</span></h6>
+    <h6>Δημιουργία λογαριασμού: <span class="font-weight-bold">{{ user.date_joined|date:'l, N j, Y' }}</span></h6>
+  </div>
+
+  {% if orders %}
+  <h6 style="max-width: 1200px;" class="profile-order-heading">
+    ΟΛΟΚΛΗΡΩΜΕΝΕΣ ΠΑΡΑΓΓΕΛΙΕΣ
+  </h6>
+  <div class="table-responsive mx-auto" style="max-width: 1200px;">
+    <table class="table text-center table-dark table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Παραγγελία #</th>
+          <th scope="col">Ημερομηνία παραγγελίας</th>
+          <th scope="col">Τραπεζική συναλλαγή</th>
+          <th scope="col">Είδη</th>
+          <th scope="col">Κόστος</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{order.id}}</td>
+          <td>{{order.date_ordered|date:'l, N j, Y'}}</td>
+          <td>{{order.bank_transaction_id}}</td>
+          <td>{{order.get_cart_items}}</td>
+          <td>{{order.get_cart_total|floatformat:2}}€</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <h6 style="max-width: 1200px;" class="mt-5 text-center font-weight-bold bg-warning mx-auto p-3 text-dark">
+    ΔΕΝ ΕΧΕΤΕ ΟΛΟΚΛΗΡΩΜΕΝΕΣ ΠΑΡΑΓΓΕΛΙΕΣ
+  </h6>
+  {% endif %}
+  <form method="POST" class="profile-form">
+    {% csrf_token %}
+    <p>Μπορείτε να αποθηκεύσετε τα παρακάτω στοιχεία ώστε να εμφανίζονται αυτόματα σε κάθε παραγγελία σας.</p>
+    <hr>
+    <h4 class="mb-3">ΣΤΟΙΧΕΙΑ ΕΠΙΚΟΙΝΩΝΙΑΣ</h4>
+    <div class="form-group">
+      <label for="responsible-name">Υπεύθυνος επικοινωνίας</label>
+      <input {% if contactDetails %}value='{{contactDetails.responsible_name}}' {% endif %} class="form-control"
+             type="text" name="responsible-name" id="responsible-name">
+    </div>
+    <div class="form-row">
+
+      <div class="form-group col-md-3">
+        <label for="landline">Σταθερό τηλέφωνο</label>
+        <input {% if contactDetails %}value='{{contactDetails.landline}}' {% endif %} type="text" name="landline"
+               id="landline" class="form-control">
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="mobile">Κινητό τηλέφωνο</label>
+        <input {% if contactDetails %}value='{{contactDetails.mobile}}' {% endif %} type="text" name="mobile"
+               id="mobile" class="form-control">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="email">Email</label>
+        <input {% if contactDetails %}value='{{contactDetails.email}}' {% endif %} type="email" name="email" id="email"
+               class="form-control">
+      </div>
+    </div>
+    <hr>
+    <h4 class="mt-3 mb-3">ΣΤΟΙΧΕΙΑ ΤΙΜΟΛΟΓΗΣΗΣ</h4>
+    <div class="form-group">
+      <label for="brand">Επωνυμία</label>
+      <input {% if invoiceDetails %}value='{{invoiceDetails.brand}}' {% endif %} type="text" class="form-control"
+             id='brand' name="brand">
+    </div>
+    <div class="form-group">
+      <label for="brand-activity">Δραστηριότητα</label>
+      <input {% if invoiceDetails %}value='{{invoiceDetails.brand_description}}' {% endif %} type="text"
+             class="form-control" id='brand-activity' name="brand-activity">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="afm">ΑΦΜ</label>
+        <input {% if invoiceDetails %}value='{{invoiceDetails.afm}}' {% endif %} type="text" name="afm" id="afm"
+               class="form-control">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="tax-office">ΔΟΥ</label>
+        <input {% if invoiceDetails %}value='{{invoiceDetails.tax_office}}' {% endif %} type="text" name="tax-office"
+               id="tax-office" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="brand-address">Διεύθυνση 1</label>
+      <input {% if invoiceDetails %}value='{{invoiceDetails.address1}}' {% endif %} type="text" name="brand-address"
+             id="brand-address" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="brand-address2">Διεύθυνση 2</label>
+      <input {% if invoiceDetails %}value='{{invoiceDetails.address2}}' {% endif %} type="text" name="brand-address2"
+             id="brand-address2" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="po-box">Ταχ. κώδικας</label>
+      <input {% if invoiceDetails %}value='{{invoiceDetails.zipcode}}' {% endif %} type="text" name="invoice-po-box"
+             id="invoice-po-box" class="form-control">
+    </div>
+    <button class="btn my-btn btn-block mt-5" type="submit">Αποθήκευση στοιχείων</button>
+  </form>
+</section>
+{% endblock content %}

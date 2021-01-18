@@ -1,0 +1,27 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+{% block metadescription %}soupla-design.gr - Σας ευχαριστούμε για την παραγγελία!!{% endblock metadescription %}
+{% block title %}soupla-design.gr | Σας ευχαριστούμε για την παραγγελία!{% endblock title %}
+
+{% block content %}
+
+{% include 'shop/menu.html' %}
+
+<section class="thanks-container">
+  <div class="container">
+    <div class="thanks-main">
+      <img src="{% static 'images/thanks.svg' %}" alt="thanks for your order">
+      <h3 class="mb-4">Σας ευχαριστούμε για την προτίμησή σας!!</h3>
+      <h4 class="mb-4">Λάβαμε την παραγγελία και θα επικοινωνήσουμε πολύ σύντομα μαζί σας.</h4>
+      <h5 class="mb-4">Για οποιαδήποτε απορία - πληροφορία - διευκρίνιση παρακαλώ<br>καλέστε στο 28430 22207 ή στείλτε
+        email στο
+        info@soupla-design.gr</h5>
+      <h6 class="mb-5">Ημερομηνία παραγγελίας: {{order.date_ordered|date:'d/m/Y'}} - Αριθμός παραγγελίας: {{order.id}}
+      </h6>
+      <a data-toggle="tooltip" data-placement="bottom" title="Αρχική σελίδα" href="{% url 'shop' %}"
+         class="btn my-btn">Επιστροφή στην αρχική σελίδα</a>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
